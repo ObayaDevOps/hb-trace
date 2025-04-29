@@ -1,76 +1,90 @@
 import {
-    Box,
-    Flex,
-    HStack,
-    Link,
-    IconButton,
-    Button,
-    Drawer,
-    VStack,
-    Text,
-    Portal,
-  } from '@chakra-ui/react';
-  import { Menu, X } from 'lucide-react';
-  import { useRef } from "react"
+  Box,
+  Flex, // Keep Flex if used elsewhere, otherwise remove if unused
+  HStack, // Keep HStack if used elsewhere, otherwise remove if unused
+  Link,
+  IconButton, // Keep IconButton if used elsewhere, otherwise remove if unused
+  Button,
+  Drawer,
+  VStack,
+  Text,
+  Portal,
+} from '@chakra-ui/react';
+import { Menu, X } from 'lucide-react';
+import { useRef } from "react"; // Keep useRef
 
-  
-  // Reusable NavLink component (Consider moving to its own file if used elsewhere)
-  const NavLink = ({ children, href }) => (
-    <Link
-      px={3}
-      py={1}
-      rounded={'md'}
-      color={'#00DEE3'} // Cyan color
-      _hover={{
-        textDecoration: 'none',
-      }}
-      href={href}
-      fontFamily="Poppins"
-      fontWeight={500}
+// Reusable NavLink component
+const NavLink = ({ children, href }) => (
+  <Link
+    px={3}
+    py={1}
+    rounded={'md'}
+    color={'#00DEE3'} // Cyan color
+    _hover={{
+      textDecoration: 'none',
+    }}
+    href={href}
+    fontFamily="Poppins"
+    fontWeight={500}
+  >
+    {children}
+  </Link>
+);
+
+export default function MobileDrawer({ isOpen, onClose, navItems, getInTouchText = "Get in Touch" }) {
+  // 1. Create a ref for the Drawer Content
+  const contentRef = useRef(null);
+
+  return (
+    // Use Drawer from Chakra UI Ark integration directly if preferred, or keep as is if using Radix via Ark
+    <Drawer.Root 
+        size={'full'} 
+        placement="start" 
+        // 3. Use the contentRef for initialFocusEl
+        initialFocusEl={contentRef} 
+        // Note: isOpen and onClose are typically managed by Drawer.Root's context, 
+        // unless you need external control. If using external control, 
+        // you might need `open={isOpen}` and `onOpenChange={(open) => !open && onClose()}` props.
+        // Check Chakra UI Ark/Radix documentation for the specific props if needed.
+        // Assuming default context-based control for simplicity here.
     >
-      {children}
-    </Link>
-  );
-  
-  export default function MobileDrawer({ isOpen, onClose, navItems, getInTouchText = "Get in Touch" }) {
-    const ref = useRef<HTMLInputElement>(null)
-
-    return (
-
-      <Drawer.Root size={'full'} placement="start" initialFocusEl={() => ref.current}>
       <Drawer.Trigger asChild>
-         <Menu 
+        <Menu 
           color='#00C6CB'
-           size={'2rem'}
-            mr={-10}
-          />
+          size={'2rem'}
+          // Removed mr={-10} as it might be specific styling not needed for the focus fix
+        />
       </Drawer.Trigger>
       <Portal>
         <Drawer.Backdrop />
         <Drawer.Positioner>
-          <Drawer.Content bg='#1A2130' color="#00DEE3" ref={ref}>
+          {/* 2. Attach the ref to Drawer.Content */}
+          <Drawer.Content ref={contentRef} bg='#1A2130' color="#00DEE3"> 
             <Drawer.Body>
-            <VStack spacing={12} align="stretch" pt={'6rem'}>
-                  {navItems.map((item) => (
-                    <NavLink key={item.label} href={item.href}>
-                      <Text
-                        fontSize={"1.75rem"}
-                        fontFamily="Poppins"
-                        fontStyle='normal'
-                        fontWeight={500}
-                        color="#00E2E5"
-                        lineHeight={'normal'}
-                        letterSpacing="0.14rem"
-                        textTransform={'uppercase'}
-                        mb={4}
-                      >
-                        {item.label}
-                      </Text>
-                    </NavLink>
-                  ))}
-                  <NavLink href='/contact'>
+              <VStack spacing={12} align="stretch" pt={'6rem'}>
+                {navItems.map((item) => (
+                  <NavLink key={item.label} href={item.href}>
+                    <Text
+                      fontSize={"1.75rem"}
+                      fontFamily="Poppins"
+                      fontStyle='normal'
+                      fontWeight={500}
+                      color="#00E2E5"
+                      lineHeight={'normal'}
+                      letterSpacing="0.14rem"
+                      textTransform={'uppercase'}
+                      mb={4} // mb={4} might be better on NavLink or VStack item
+                    >
+                      {item.label}
+                    </Text>
+                  </NavLink>
+                ))}
+                {/* Wrap the Button inside NavLink only if the button itself should navigate */}
+                {/* If the Button triggers an action *within* the app, it shouldn't be wrapped in NavLink */}
+                {/* Assuming it navigates to /contact: */}
+                <NavLink href='/contact'> 
                   <Button
-                    mt={2}
+                    // Removed mt={2} - VStack spacing should handle this
                     px={'0.625rem'}
                     py={'1.25rem'}
                     variant={'outline'}
@@ -96,21 +110,19 @@ import {
                       {getInTouchText}
                     </Text>
                   </Button>
-                  </NavLink>
-                </VStack>
+                </NavLink>
+              </VStack>
             </Drawer.Body>
 
             <Drawer.CloseTrigger asChild>
-              <Box m={6}>
-                <X color="#00E2E5" size={'2.75rem'} />
+              {/* Position the close button more intentionally, e.g., absolute positioning */}
+              <Box position="absolute" top={4} right={4} m={2}> 
+                <X color="#00E2E5" size={'2.75rem'} cursor="pointer" /> 
               </Box>
             </Drawer.CloseTrigger>
           </Drawer.Content>
         </Drawer.Positioner>
       </Portal>
     </Drawer.Root>
-  
-
-    );
-  }
-  
+  );
+}
