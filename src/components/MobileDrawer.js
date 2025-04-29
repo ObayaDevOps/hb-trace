@@ -31,9 +31,11 @@ import {
   );
   
   export default function MobileDrawer({ isOpen, onClose, navItems, getInTouchText = "Get in Touch" }) {
+    const ref = useRef<HTMLInputElement>(null)
+
     return (
 
-      <Drawer.Root size={'full'} placement="start">
+      <Drawer.Root size={'full'} placement="start" initialFocusEl={() => ref.current}>
       <Drawer.Trigger asChild>
          <Menu 
           color='#00C6CB'
@@ -44,7 +46,7 @@ import {
       <Portal>
         <Drawer.Backdrop />
         <Drawer.Positioner>
-          <Drawer.Content bg='#1A2130' color="#00DEE3">
+          <Drawer.Content bg='#1A2130' color="#00DEE3" ref={ref}>
             <Drawer.Body>
             <VStack spacing={12} align="stretch" pt={'6rem'}>
                   {navItems.map((item) => (
