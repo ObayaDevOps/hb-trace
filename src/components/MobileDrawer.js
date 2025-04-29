@@ -11,6 +11,8 @@ import {
     Portal,
   } from '@chakra-ui/react';
   import { Menu, X } from 'lucide-react';
+  import { useRef } from "react"
+
   
   // Reusable NavLink component (Consider moving to its own file if used elsewhere)
   const NavLink = ({ children, href }) => (
