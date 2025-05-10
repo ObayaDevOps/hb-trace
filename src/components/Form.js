@@ -2,12 +2,15 @@
 
 import { Button, Field, Input, Stack, Text } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
+import { useState } from "react";
 
 export default function Form ({ buttonPosition='absolute' }){
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isValid }, // Destructure errors, isSubmitting, isValid
+    reset, // Get reset from useForm
   } = useForm({
     mode: "onSubmit", // Validate on submit
     reValidateMode: "onChange" // Re-validate when input changes after first submit attempt
@@ -16,7 +19,7 @@ export default function Form ({ buttonPosition='absolute' }){
   // This function will ONLY run if validation passes
   const onSubmit = async (data) => {
     console.log("Form data is valid:", data);
-    // setSubmitted(true); // You might want state for success message
+    setShowSuccessMessage(false);
 
     // Data is already collected by react-hook-form in the 'data' object
     // let userTypedData = {
@@ -37,14 +40,18 @@ export default function Form ({ buttonPosition='absolute' }){
 
         if (res.ok) {
             console.log("Form submitted successfully!");
+            setShowSuccessMessage(true);
+            reset(); // Reset form fields
             // Optionally: Reset form, show success message
             // reset(); // You can get 'reset' from useForm() if needed
         } else {
             console.error("Form submission failed:", res.statusText);
+            setShowSuccessMessage(false);
             // Optionally: Show a generic API error message
         }
     } catch (error) {
         console.error("An error occurred during submission:", error);
+        setShowSuccessMessage(false);
         // Optionally: Show a network error message
     }
   }
@@ -52,6 +59,7 @@ export default function Form ({ buttonPosition='absolute' }){
   // This function can be used to see errors when validation fails on submit attempt
   const onInvalid = (errors) => {
     console.log("Validation Errors:", errors);
+    setShowSuccessMessage(false);
   }
 
   // Determine if the main error message should be shown
@@ -194,12 +202,28 @@ export default function Form ({ buttonPosition='absolute' }){
 
         {/* --- General Error Message --- */}
         {/* Show this only if there are validation errors after an attempt */}
-        { Object.keys(errors).length > 0 && (
+        { Object.keys(errors).length > 0 && !showSuccessMessage && (
             <Text color="#DB3E00" 
             fontFamily="Poppins"
             fontSize="0.75rem" fontWeight="400" width="full" textAlign="right" mt={2} mb={'-2rem'}>
                 Please fill in all details and message.
             </Text>
+        )}
+
+        {/* --- Success Message --- */}
+        {showSuccessMessage && (
+          <Text
+            color="green.400"
+            fontFamily="Poppins"
+            fontSize="0.75rem"
+            fontWeight="400"
+            width="full"
+            textAlign="right"
+            mt={2}
+            mb={'-2rem'}
+          >
+            Message sent successfully!
+          </Text>
         )}
 
         {/* --- Submit Button --- */}
