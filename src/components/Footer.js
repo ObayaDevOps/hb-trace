@@ -73,7 +73,7 @@ const Footer = () => {
             pt={2}
             display={{base:'none', lg:'flex'}}
             >
-              © {currentYear} Ashton & Carrington. All rights reserved
+              © {currentYear} HB Fine Honey Suppliers Limited. All rights reserved
             </Text>
             </Box>
             </Stack>
