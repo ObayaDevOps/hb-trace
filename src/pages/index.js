@@ -6,10 +6,6 @@ import { motion } from "framer-motion";
 
 import 'focus-visible/dist/focus-visible';
 
-// 1. Import Sanity client (adjust path if needed)
-import sanityClient  from '../../sanity/lib/client'; 
-// 2. Import urlFor helper (adjust path if needed)
-import { urlForImage } from '../../sanity/lib/image'; 
 
 import {
   Box,
@@ -19,66 +15,22 @@ import {
   VStack,
   Button,
   Container,
+  Input,
 } from '@chakra-ui/react';
 
 // Removed unused cloudinary imports
-import ServicesSection from '../components/ServicesSection';
-import WhoWeAreSection from '../components/WhoWeAreSection';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
-// 3. Define the GROQ query
-const landingPageQuery = `
-*[_type == "landingPage"][0] {
-  pageTitle,
-  metaDescription,
-  hero {
-    heading,
-    logo
-  },
-  servicesSection {
-    title,
-    services[] {
-      title,
-      description,
-      iconImage,
-      backgroundImage,
-      linkText,
-      linkUrl
-    }
-  },
-  whoWeAreSection {
-    title,
-    ifaAccredited {
-      title,
-      description1,
-      description2,
-      logo
-    },
-    features[] {
-      title,
-      description,
-      image
-    }
-  }
-}
-`;
 
 // 4. Update Home component to receive props
 export default function Home({ landingPageData }) {
-  // Destructure props for easier access
-  const { 
-    pageTitle, 
-    metaDescription, 
-    hero, 
-    servicesSection, 
-    whoWeAreSection 
-  } = landingPageData || {};
+
 
   return (
     <Box
     // className={`${geistSans.variable} ${geistMono.variable} ${spaceMono.variable} ${poppins.variable}`}
-      bg={'#000819'}
+      bg={'#f5cb81'}
       minH={'100vh'}
       display="flex"
       flexDirection="column"
@@ -101,10 +53,10 @@ export default function Home({ landingPageData }) {
 
       <Head>
         {/* Use data from Sanity */}
-        <title>{'Ashton & Carrington'}</title>
-        <meta name="description" content={metaDescription || 'Empowering Innovation and Financial Growth Through Expertise'} />
+        <title>Honey Trace | Humble Beeing Honey </title>
+        <meta name="description" content= 'Ugandas Finest Raw Organic Honey' />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/Vector.svg" />
+        <link rel="icon" href="/Humble_beeing_black_no_text.png" />
       </Head>
 
       <Navbar bg={{base: 'transparent', lg: 'none'}} />
@@ -116,25 +68,21 @@ export default function Home({ landingPageData }) {
             transition={{ duration: 0.7 }}
         >
         <Box py={{base: 10, lg: 16}}>
-
-            {hero?.logo && (
               <Center>
                     <Image
                       // Use Sanity image builder
-                      src={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1744125894/Type_Default_Colour_Gradient_on_Blue_lgi2ha.svg'}
-                      //https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1744125894/Type_Default_Colour_Gradient_on_Blue_lgi2ha.svg
-                      alt={'Ashton & Carrington Logo'} // Use heading as alt text fallback
+                      src={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1752839793/Humble_Beeing_Black_Logo_with_text.svg'}
+                      alt={'Humble Beeing Logo'} // Use heading as alt text fallback
                       width={611}
                       height={250}
                       priority
                       placeholder="blur"
                       // Generate blurDataURL if metadata exists
-                      blurDataURL={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1744125894/Type_Default_Colour_Gradient_on_Blue_lgi2ha.svg'} 
+                      blurDataURL={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1752839793/BlackWhiteLogo_2_fl5lde.svg'} 
                     />
               </Center>
-            )}
 
-            <Center px={{base: 6, lg: 8}} pt={8}> {/* Added padding top */}
+            <Center px={{base: 6, lg: 8}} pt={8}>
               <Heading
                 as="h1"
                 fontFamily="Poppins"
@@ -143,32 +91,25 @@ export default function Home({ landingPageData }) {
                 fontWeight={500}
                 letterSpacing={'0.72px'}
                 textAlign={'center'}
-                bgClip="text"
-                bgGradient="to-r"
-                gradientFrom='#00DEE3' // Replaced with full definition for clarity
-                gradientTo='#5700C4'
-
                 maxW="container.md"
               >
-                {/* Use heading from Sanity */}
-                {hero?.heading || 'Empowering Innovation and Financial Growth Through Expertise'}
+                Trace - From Farmer to You
               </Heading>
             </Center>
+
+            
+            <Center pt={4}>
+              <Input
+                placeholder="Enter Unique Jar Code"
+                variant="outline"
+                rounded='3xl'
+                borderColor="black"
+                width={{ base: '90%', md: '50%' }}
+              />
+            </Center>
         </Box>
-          {/* Pass Sanity data as props */}
-          {servicesSection && <ServicesSection sectionData={servicesSection} />}
           </motion.div>
 
-
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6 }}
-        >
-          {/* Pass Sanity data as props */}
-          {whoWeAreSection && <WhoWeAreSection sectionData={whoWeAreSection} />}
-        </motion.div>
       </Box>
 
       <Footer />
@@ -177,15 +118,4 @@ export default function Home({ landingPageData }) {
   );
 }
 
-// 5. Add getStaticProps function
-export async function getStaticProps() {
-  const landingPageData = await sanityClient.fetch(landingPageQuery);
-  return {
-    props: {
-      landingPageData,
-    },
-    // Optional: Revalidate the page content periodically
-    // revalidate: 60, // In seconds (e.g., every minute)
-  };
-}
 

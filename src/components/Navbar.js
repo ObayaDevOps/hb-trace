@@ -22,7 +22,7 @@ const NavLink = ({ children, href }) => (
     px={3}
     py={1}
     rounded={'md'}
-    color={'#00DEE3'} // Cyan color from image
+    color={'black'} // Cyan color from image
     _hover={{
       textDecoration: 'none',
       // Add a subtle hover effect if desired
@@ -43,9 +43,9 @@ export default function Navbar(props) {
 
   const navItems = [
     { label: 'Home', href: '/'},
-    { label: 'R&D Tax Credits', href: '/research-and-development-tax-credits' },
-    { label: 'Capital Allowances', href: '/capital-allowances' },
-    { label: 'Accounts & Filling', href: '/accounts-filing' },
+    { label: 'All About Honey', href: '/info' },
+    { label: 'Shop', href: '/shop' },
+
   ];
 
   return (
@@ -71,9 +71,9 @@ export default function Navbar(props) {
         {/* Logo - Using Image component like in index.js */}
         <Link href="/" _hover={{ textDecoration: 'none' }}>
              <Image
-                src={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1744279814/Vector_rdxjfp.svg'}
-                alt="Ashton & Carrington Logo"
-                height={'40px'} // Adjust height as needed
+                src={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1752840337/Humble_beeing_black_no_text.png'}
+                alt="Humble Beeing Logo"
+                height={'70px'} // Adjust height as needed
                 width={'auto'} // Maintain aspect ratio
                 // ml={'64px'}
              />
@@ -89,9 +89,9 @@ export default function Navbar(props) {
                 ))}
               </HStack>
 
-              <Box ml={4}>
+              {/* <Box ml={4}>
                 <ContactModal />
-              </Box>
+              </Box> */}
 
             </HStack>
           </Flex>
@@ -111,8 +111,8 @@ export default function Navbar(props) {
         <Box pl={4} >
           <Link href="/" _hover={{ textDecoration: 'none' }}>
                 <Image
-                    src={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1744279814/Vector_rdxjfp.svg'}
-                    alt="Ashton & Carrington Logo"
+                    src={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1752840337/Humble_beeing_black_no_text.png'}
+                    alt="Humble Beeing Logo"
                     height={'40px'} // Adjust height as needed
                     width={'auto'} // Maintain aspect ratio
                     // ml={'64px'}

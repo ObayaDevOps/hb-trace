@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains:['cdn.sanity.io','res.cloudinary.com'],
+    domains:['res.cloudinary.com'],
   },
   experimental: {
     optimizePackageImports: ["@chakra-ui/react"],

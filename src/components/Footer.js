@@ -20,7 +20,7 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Box  color="white" pt={{ base: 8, md: 20 }}  px={0} fontFamily={poppins.style.fontFamily}>
+    <Box  color="black" pt={{ base: 8, md: 20 }}  px={0} fontFamily={poppins.style.fontFamily}>
        <Box px={'5.5rem'} py={'1rem'}>
         <Flex
           direction={{ base: 'column', md: 'row' }}
@@ -33,8 +33,8 @@ const Footer = () => {
             <Stack direction={{ base: 'column', md: 'row' }}>
             <Box>
               <Image
-                src={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1744125894/Type_Default_Colour_Gradient_on_Blue_lgi2ha.svg'} // Replace with your actual logo URL if different
-                alt="Ashton & Carrington Logo"
+                src={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1752840337/Humble_beeing_black_no_text.png'} // Replace with your actual logo URL if different
+                alt="Humble Beeing Logo"
                 height={{ base: '80px', md: '80px' }} // Adjust size as needed
                 objectFit="contain"
               />
@@ -42,22 +42,22 @@ const Footer = () => {
             <Box>
             <HStack spacing={3}>
               <Link href="https://linkedin.com" isExternal aria-label="LinkedIn">
-                <Icon as={FaLinkedin} boxSize={6} color="white" bg="#202020" p={1} borderRadius="md" />
+                <Icon as={FaLinkedin} boxSize={6} color="black" bg="#202020" p={1} borderRadius="md" />
               </Link>
               {/* Replace with actual link and consider a more specific icon if needed */}
               <Link href="#" isExternal aria-label="Developer Portfolio/Website">
-                <Icon as={FiCode} boxSize={6} color="white" bg="#202020" p={1} borderRadius="md" />
+                <Icon as={FiCode} boxSize={6} color="black" bg="#202020" p={1} borderRadius="md" />
               </Link>
               <Button
                 size="sm"
                 variant="outline"
                 colorScheme="whiteAlpha"
                 borderColor="gray.600"
-                color="white"
+                color="black"
                 _hover={{ bg: 'gray.700' }}
                 ml={2} // Add margin to space it from icons
               >
-              <Link href='https://www.dralegawebops.com/' isExternal aria-label="Developer Portfolio/Website" color='white'>
+              <Link href='https://www.dralegawebops.com/' isExternal aria-label="Developer Portfolio/Website" color='black'>
                 Built by DWO
               </Link>
                 
@@ -68,7 +68,7 @@ const Footer = () => {
             fontFamily="Poppins"
             fontStyle='normal'
             fontWeight={500}
-            color="white"
+            color="black"
             lineHeight={'1.5rem'}
             pt={2}
             display={{base:'none', lg:'flex'}}
@@ -86,8 +86,8 @@ const Footer = () => {
           <VStack align={{ base: 'center', md: 'flex-end' }} spacing={1} textAlign={{ base: 'center', md: 'right' }}>
 
             
-            <Link color={'white'} 
-              href="mailto:contact@ashtonandcarrington.co.uk" 
+            <Link color={'black'} 
+              href="mailto:hello@humble-beeing.com" 
               fontSize="0.875rem"
               fontFamily="Poppins"
               fontStyle='normal'
@@ -95,17 +95,17 @@ const Footer = () => {
               lineHeight={'1.5rem'}
           
               _hover={{ textDecoration: 'underline' }}>
-              contact@ashtonandcarrington.co.uk
+              hello@humble-beeing.com
             </Link>
             <Text
               fontSize="0.875rem"
               fontFamily="Poppins"
               fontStyle='normal'
               fontWeight={500}
-              color="white"
+              color="black"
               lineHeight={'1.5rem'}
             >
-              Trinity Offices, 114 Northenden Rd, Sale, M33 3HD
+              2nd Floor, Tools and Machinery Building, Kabalagala, Kampala
             </Text>
 
             <Text 
@@ -113,12 +113,12 @@ const Footer = () => {
             fontFamily="Poppins"
             fontStyle='normal'
             fontWeight={500}
-            color="white"
+            color="black"
             lineHeight={'1.5rem'}
             pt={2}
             display={{base:'flex', lg:'none'}}
             >
-              © {currentYear} Ashton & Carrington. All rights reserved
+              © {currentYear} HB Fine Honey Suppliers Limited. All rights reserved
             </Text>
           </VStack>
         </Flex>
