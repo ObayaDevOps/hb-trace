@@ -31,22 +31,22 @@ const Footer = () => {
           {/* Left Section */}
           <HStack align={{ base: 'center', md: 'flex-start' }} spacing={4}>
             <Stack direction={{ base: 'column', md: 'row' }}>
-            <Box>
+            {/* <Box>
               <Image
                 src={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1752840337/Humble_beeing_black_no_text.png'} // Replace with your actual logo URL if different
                 alt="Humble Beeing Logo"
                 height={{ base: '80px', md: '80px' }} // Adjust size as needed
                 objectFit="contain"
               />
-            </Box>
+            </Box> */}
             <Box>
             <HStack spacing={3}>
               <Link href="https://linkedin.com" isExternal aria-label="LinkedIn">
-                <Icon as={FaLinkedin} boxSize={6} color="black" bg="#202020" p={1} borderRadius="md" />
+                <Icon as={FaLinkedin} boxSize={6} color="white" bg="#202020" p={1} borderRadius="md" />
               </Link>
               {/* Replace with actual link and consider a more specific icon if needed */}
               <Link href="#" isExternal aria-label="Developer Portfolio/Website">
-                <Icon as={FiCode} boxSize={6} color="black" bg="#202020" p={1} borderRadius="md" />
+                <Icon as={FiCode} boxSize={6} color="white" bg="#202020" p={1} borderRadius="md" />
               </Link>
               <Button
                 size="sm"
