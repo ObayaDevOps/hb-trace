@@ -1,55 +1,104 @@
-Stack: Blank Project
-		- Next.js (Pages Router)
+# HB-TRACE
 
-		- ChakraUI v3
-		- Lucide Icons
-		- Google Fonts (@next/font)
+Implementation agents: start with [the bounded-context implementation plan](docs/implementation/START-HERE.md). Development uses focused checks; comprehensive testing is deferred.
 
-		- next-sanity
-		- NodeMailer
+HB-TRACE is the V1 honey and beeswax traceability workspace for Humble Beeing
+Honey. It gives customers a privacy-safe batch/lot lookup and gives staff a
+workspace for sourcing, material lineage, quality, packaging and controlled
+operations records.
 
-		- Cursor: add to @Docs
-		https://chakra-ui.com/llms-full.txt
+The repository currently runs as a local-first walking skeleton. Local mode is
+fully usable without provider credentials and is deliberately labelled as
+demo data. Hosted mode fails closed until the Supabase persistence adapter and
+Supabase Storage and application-owned publication services are implemented and enabled.
+Follow [the target implementation plan](docs/implementation/START-HERE.md); older
+provider-activation notes describe the historical foundation.
 
-
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
-
-## Getting Started
-
-First, run the development server:
+## Run locally
 
 ```bash
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000). The sample public code is
+`HB-26-0042`; the staff workspace uses a local demo identity.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+Useful routes:
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+- `/` — product entry point
+- `/verify` — public batch/lot lookup
+- `/staff` — operations dashboard
+- `/staff/sourcing` — purchase and receipt capture surface
+- `/staff/material` — material and direct-lineage view
+- `/staff/quality` — measurements and holds
+- `/staff/packaging` — packaging and publication staging
+- `/staff/operations` — forms, SOPs and requirements register
+- `/auth/login` — hosted staff sign-in boundary
+- `/api/v1/health` — provider-safe readiness response
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+## What is implemented
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- App Router routes with strict TypeScript for the domain and server layers.
+- Framework-independent exact decimal/money/quantity types; binary floating
+  point values cannot enter domain calculations.
+- Application-generated UUIDv4 identifiers, explicit state transitions, role
+  guards, exact material allocations, cycle detection and deterministic
+  backward/forward lineage traces.
+- A standard PostgreSQL foundation migration plus a transactional in-memory
+  adapter for local development and contract tests.
+- Supabase SSR client/proxy boundaries, server-side identity-to-actor/role
+  mapping and a protected staff layout. No service-role secret is imported by
+  browser code.
+- IndexedDB/Dexie outbox envelopes with protocol versioning, dependencies,
+  deep canonical payload hashes, explicit local/server statuses and safe
+  retry behavior.
+- A whitelisted public batch projection, neutral not-found handling and an
+  in-process lookup rate limit. Public pages never join private operational
+  records at request time.
+- Accessible staff/public surfaces with clear local-vs-server status language.
+- Local purchase/receipt command handling and fixed CSV/XLSX farmer/apiary
+  imports with private source retention, dry-run validation, duplicate review,
+  atomic commit and idempotent replay. Hosted writes remain disabled.
 
-## Learn More
+The forms, SOPs, requirements and provider-backed asset controls are currently
+UI and schema foundations. They do not claim to upload private evidence,
+approve live documents, publish live batches or persist hosted writes until
+the provider adapters and pilot decisions are in place.
 
-To learn more about Next.js, take a look at the following resources:
+## Validation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+```bash
+npm run typecheck
+npm test
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The tests cover exact arithmetic, identifiers, workflow authorization,
+material allocation/lineage, canonical sync hashing, dependency retries and
+transactional in-memory persistence, local command handling and import preview/
+commit behavior.
 
-## Deploy on Vercel
+## Database
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The files in `supabase/migrations/` are ordinary PostgreSQL and use
+application-generated IDs. They are intentionally not applied on app startup.
+Review and apply them through a separately authorized migration process after
+selecting the development/test/production projects. See
+[`docs/persistence.md`](docs/persistence.md).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+## Project map
+
+```text
+src/domain/       provider-neutral business invariants
+src/server/       auth, persistence ports and server-only boundaries
+src/app/          App Router pages and API handlers
+src/lib/          runtime config, demo projection and offline protocol
+supabase/         reviewed SQL migrations
+docs/             persistence, staff and hosted activation guidance
+```
+
+Keep farmer contact data, exact locations, staff signatures, health records,
+internal investigations and unapproved claims out of public projections. V1
+codes identify a batch/lot, not an individually serialized jar.

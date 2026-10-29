@@ -1,135 +1,25 @@
-import { Box, Container, Heading, SimpleGrid, Text, VStack, Link, Icon, Flex } from '@chakra-ui/react';
-import { ArrowRight } from 'lucide-react'; // Keep ArrowRight for the link
-import NextImage from 'next/image';
-import { urlForImage } from '../../sanity/lib/image'; 
+import { ArrowRight } from "lucide-react";
 
-const ServiceCard = ({ 
-  iconImageUrl,
-  title,
-  description,
-  backgroundImageUrl,
-  backgroundImageBlur, 
-  linkText, 
-  linkUrl 
-}) => {
-  return (
-    <Box
-      bgImage={backgroundImageUrl ? `url(${backgroundImageUrl})` : 'none'}
-      bgSize="cover"
-      bgPosition="center"
-      borderRadius="xl"
-      p={{base: '1.5rem', lg: '2rem'}}
-      m={2}
-      mb={'2rem'}
-      position="relative"
-      overflow="hidden"
-      color="white"
-      _before={{
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        bg: 'linear-gradient(to bottom, rgba(0, 8, 25, 0.40), rgba(0, 8, 25, 0.80))',
-        zIndex: 1,
-      }}
-      boxShadow={`0px 0px 20px 3px rgba(0,4,14,1)`}
-
-      minH={{ base: "auto", md: "450px" }}
-
-      display="flex"
-      flexDirection="column"
-      justifyContent="space-between"
-    >
-      <VStack spacing={4} align="start" zIndex={2} position="relative" flexGrow={1}>
-        {iconImageUrl && (
-          <NextImage
-            src={iconImageUrl}
-            alt={`${title} icon`}
-            width={72}
-            height={72}
-            style={{ marginBottom: '0.5rem'}}
-          />
-        )}
-        <Heading
-         fontSize="1.25rem" 
-         fontFamily="Poppins" 
-         fontWeight={500}
-         fontStyle={'normal'}
-         letterSpacing={'0.025rem'}
-         lineHeight="normal"
-          pb={2}
-        >
-          {title}
-        </Heading>
-        <Text 
-          fontSize="1rem" 
-          fontFamily="Poppins"
-          fontStyle={'normal'} 
-          fontWeight={400} 
-          lineHeight="1.875rem"
-        >
-          {description}
-        </Text>
-      </VStack>
-      {linkUrl && (
-        <Link
-          href={linkUrl}
-          my={6}
-          color="#00E2E5"
-          fontWeight={500}
-          fontFamily="Poppins"
-          lineHeight='1.25rem'
-          display="inline-flex"
-          alignItems="center"
-          zIndex={2}
-          position="relative"
-          _hover={{ textDecoration: 'underline' }}
-        >
-          {linkText || 'Find out more'} <Icon as={ArrowRight} ml={2} />
-        </Link>
-      )}
-    </Box>
-  );
-};
+const ServiceCard = ({ title, description, linkText, linkUrl }) => (
+  <article style={{ background: "linear-gradient(160deg, #15243d, #000819)", borderRadius: ".75rem", boxShadow: "0 0 20px 3px rgba(0,4,14,1)", color: "white", display: "flex", flexDirection: "column", justifyContent: "space-between", minHeight: "300px", overflow: "hidden", padding: "2rem", position: "relative" }}>
+    <span aria-hidden="true" style={{ background: "radial-gradient(circle at top right, rgba(0,226,229,.35), transparent 45%)", inset: 0, position: "absolute" }} />
+    <div style={{ position: "relative" }}>
+      <span aria-hidden="true" style={{ alignItems: "center", background: "linear-gradient(135deg, #00E2E5, #5700C4)", borderRadius: ".5rem", display: "flex", fontSize: "2rem", height: "4.5rem", justifyContent: "center", marginBottom: "1.5rem", width: "4.5rem" }}>✦</span>
+      <h3 style={{ fontFamily: "Poppins, sans-serif", fontSize: "1.25rem", fontWeight: 500, letterSpacing: ".025rem", margin: "0 0 .75rem" }}>{title}</h3>
+      <p style={{ fontFamily: "Poppins, sans-serif", lineHeight: "1.875rem", margin: 0 }}>{description}</p>
+    </div>
+    {linkUrl && <a href={linkUrl} style={{ alignItems: "center", color: "#00E2E5", display: "inline-flex", fontFamily: "Poppins, sans-serif", fontWeight: 500, gap: ".5rem", marginTop: "1.5rem", position: "relative", width: "fit-content" }}>{linkText || "Find out more"}<ArrowRight size={18} /></a>}
+  </article>
+);
 
 const ServicesSection = ({ sectionData }) => {
   const { title, services } = sectionData || {};
-
   return (
-    <Container maxW="container.xl" py={16} px={{ base: 4, md: 8 }}>
-      <Heading
-        fontSize="1.75rem"
-        fontFamily="Poppins"
-        fontStyle='normal'
-        fontWeight={500}
-        color="white"
-        lineHeight={'normal'}
-        letterSpacing="0.14rem"
-        textAlign={{ base: 'center', md: 'left' }}
-        pb={'1.5rem'}
-      >
-        {title || 'OUR SERVICES'}
-      </Heading>
-      {services && services.length > 0 && (
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={8} >
-          {services.map((service, index) => (
-            <ServiceCard
-              key={index}
-              iconImageUrl={service.iconImage ? urlForImage(service.iconImage).width(72).height(72).url() : ''}
-              title={service.title}
-              description={service.description}
-              backgroundImageUrl={service.backgroundImage ? urlForImage(service.backgroundImage).url() : ''}
-              backgroundImageBlur={service.backgroundImage?.asset?.metadata?.lqip}
-              linkText={service.linkText}
-              linkUrl={service.linkUrl}
-            />
-          ))}
-        </SimpleGrid>
-      )}
-    </Container>
+    <section style={{ margin: "0 auto", maxWidth: "1280px", padding: "4rem clamp(1rem, 4vw, 2rem)" }}>
+      <h2 style={{ color: "white", fontFamily: "Poppins, sans-serif", fontSize: "1.75rem", fontWeight: 500, letterSpacing: ".14rem", margin: "0 0 1.5rem" }}>{title || "OUR SERVICES"}</h2>
+      {services?.length > 0 && <div style={{ display: "grid", gap: "2rem", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))" }}>{services.map((service, index) => <ServiceCard key={service._key || index} title={service.title} description={service.description} linkText={service.linkText} linkUrl={service.linkUrl} />)}</div>}
+    </section>
   );
 };
 
-export default ServicesSection; 
+export default ServicesSection;

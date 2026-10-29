@@ -1,0 +1,26 @@
+# 13: Packaging and factual publication
+
+Scheduling index only. Dispatch one task, never this whole directory.
+
+- [13-contract-01: Packaging and factual publication — contract slice 1](13-contract-01.md)
+- [13-behavior: Packaging and factual publication — connect behavior](13-behavior.md)
+- [13-ui-bottling-inputs: Bottling · choose lot](13-ui-bottling-inputs.md)
+- [13-ui-bottling-details: Bottling · jars & balance](13-ui-bottling-details.md)
+- [13-ui-bottling-review: Bottling · review](13-ui-bottling-review.md)
+- [13-ui-bottling-saved: Bottling complete](13-ui-bottling-saved.md)
+- [13-ui-jar-label: Jar batch label](13-ui-jar-label.md)
+- [13-ui-packaging-submit: Packaging ready for review](13-ui-packaging-submit.md)
+- [13-ui-packaging-submitted: Packaging review requested](13-ui-packaging-submitted.md)
+- [13-ui-publication-home: Publication queue](13-ui-publication-home.md)
+- [13-ui-publication-review: Public page · readiness](13-ui-publication-review.md)
+- [13-ui-publication-preview: Public page · preview](13-ui-publication-preview.md)
+- [13-ui-publication-confirm: Public page · confirm](13-ui-publication-confirm.md)
+- [13-ui-publication-saved: Public page published](13-ui-publication-saved.md)
+- [13-ui-public-lookup: Customer · enter code](13-ui-public-lookup.md)
+- [13-ui-public-batch: Customer · batch story](13-ui-public-batch.md)
+- [13-ui-public-source: Customer · apiary & forage](13-ui-public-source.md)
+- [13-ui-public-blend: Customer · multiple sources](13-ui-public-blend.md)
+- [13-ui-public-no-profile: Customer · source summary](13-ui-public-no-profile.md)
+- [13-ui-public-not-found: Customer · no public batch](13-ui-public-not-found.md)
+- [13-ui-public-unavailable: Customer · service unavailable](13-ui-public-unavailable.md)
+- [13-ui-public-recalled: Customer · batch notice](13-ui-public-recalled.md)

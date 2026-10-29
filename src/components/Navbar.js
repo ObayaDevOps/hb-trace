@@ -1,127 +1,42 @@
-import {
-  Box,
-  Flex,
-  HStack,
-  Link,
-  Button,
-  useDisclosure,
-  useBreakpointValue,
-  VStack,
-  Image,
-  Dialog,
-  Text,
-  Portal,
-} from '@chakra-ui/react';
-import { useState } from 'react';
-import Form from '@/components/Form'
-import MobileDrawer from './MobileDrawer'; // Import the new component
-import ContactModal from './ContactModal'; // Import the ContactModal component
+"use client";
 
-const NavLink = ({ children, href }) => (
-  <Link
-    px={3}
-    py={1}
-    rounded={'md'}
-    color={'black'} // Cyan color from image
-    _hover={{
-      textDecoration: 'none',
-      // Add a subtle hover effect if desired
-      // bg: useColorModeValue('gray.200', 'gray.700'),
-    }}
-    href={href}
-    fontFamily="Poppins" // Assuming Poppins based on index.js heading
-    fontWeight={500} // Match heading weight
-  >
-    {children}
-  </Link>
-);
+import { useEffect, useState } from "react";
+import MobileDrawer from "./MobileDrawer";
 
-export default function Navbar(props) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  // Use 'lg' breakpoint to switch between desktop and mobile nav
-  const isDesktop = useBreakpointValue({ base: false, lg: true });
+const navItems = [
+  { label: "Home", href: "/" },
+  { label: "All About Honey", href: "/info" },
+  { label: "Shop", href: "/shop" },
+];
 
-  const navItems = [
-    { label: 'Home', href: '/'},
-    { label: 'All About Honey', href: '/info' },
-    { label: 'Shop', href: '/shop' },
-
-  ];
-
+export default function Navbar({ bg }) {
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 992px)");
+    const update = () => setIsDesktop(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  const background = typeof bg === "string" ? bg : "transparent";
   return (
-    <Box 
-    px={{base: '2rem', lg: '5.5rem'}} 
-    py={{base: '1rem', lg: '1rem'}} 
-    position="sticky" 
-    top={0} 
-    zIndex="sticky"
-    bg={props.bg}
-    // bgGradient={{base:"to-b", lg: 'none'}}
-    // gradientFrom={{base: props.bg ,lg: 'none'}}
-    // gradientTo={{base:'transparent', lg: 'none'}}
-    >
-      <Flex 
-      h={16} 
-      alignItems={'center'} 
-      justifyContent={'space-between'} 
-      maxW="container.xl" 
-      mx="auto"
-      display={{base: 'none', lg: 'flex'}}
-      >
-        {/* Logo - Using Image component like in index.js */}
-        <Link href="/" _hover={{ textDecoration: 'none' }}>
-             <Image
-                src={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1752840337/Humble_beeing_black_no_text.png'}
-                alt="Humble Beeing Logo"
-                height={'70px'} // Adjust height as needed
-                width={'auto'} // Maintain aspect ratio
-                // ml={'64px'}
-             />
-        </Link>
-
-
-          <Flex display={{base: 'none', lg: 'flex'}}>
-            {/* Desktop Navigation Links */}
-            <HStack spacing={'1.5rem'} alignItems={'left'}>
-              <HStack as={'nav'} spacing={'1.5rem'}>
-                {navItems.map((item) => (
-                  <NavLink key={item.label} href={item.href}>{item.label}</NavLink>
-                ))}
-              </HStack>
-
-              {/* <Box ml={4}>
-                <ContactModal />
-              </Box> */}
-
-            </HStack>
-          </Flex>
-
-      </Flex>
-
-      {/* Mobile Drawer */}
-      <Box>
-      <Flex display={{base: 'flex', lg: 'none'}} alignItems="center" justifyContent="flex-start">
-          <MobileDrawer
-            isOpen={isOpen}
-            onClose={onClose}
-            navItems={navItems}
-            getInTouchText="Get in Touch"
-          />
-
-        <Box pl={4} >
-          <Link href="/" _hover={{ textDecoration: 'none' }}>
-                <Image
-                    src={'https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1752840337/Humble_beeing_black_no_text.png'}
-                    alt="Humble Beeing Logo"
-                    height={'40px'} // Adjust height as needed
-                    width={'auto'} // Maintain aspect ratio
-                    // ml={'64px'}
-                />
-            </Link>
-          </Box>
-
-      </Flex>
-      </Box>
-    </Box>
+    <header style={{ background, padding: "1rem clamp(2rem, 7vw, 5.5rem)", position: "sticky", top: 0, zIndex: 20 }}>
+      <div style={{ alignItems: "center", display: "flex", height: "4rem", justifyContent: "space-between", margin: "0 auto", maxWidth: "1280px" }}>
+        {isDesktop ? (
+          <>
+            <a href="/" aria-label="Humble Beeing home"><img src="/Humble_beeing_black_no_text.png" alt="Humble Beeing Logo" height="70" style={{ display: "block", height: "70px", objectFit: "contain", width: "auto" }} /></a>
+            <nav aria-label="Primary navigation" style={{ display: "flex", gap: "1.5rem" }}>
+              {navItems.map((item) => <a key={item.label} href={item.href} style={{ color: "black", fontFamily: "Poppins, sans-serif", fontWeight: 500, padding: ".25rem .75rem" }}>{item.label}</a>)}
+            </nav>
+          </>
+        ) : (
+          <>
+            <MobileDrawer navItems={navItems} getInTouchText="Get in Touch" />
+            <a href="/" aria-label="Humble Beeing home" style={{ marginLeft: "1rem" }}><img src="/Humble_beeing_black_no_text.png" alt="Humble Beeing Logo" height="40" style={{ display: "block", height: "40px", objectFit: "contain", width: "auto" }} /></a>
+            <span aria-hidden="true" />
+          </>
+        )}
+      </div>
+    </header>
   );
-} 
+}

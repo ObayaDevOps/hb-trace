@@ -1,0 +1,271 @@
+openapi: 3.1.0
+info:
+  title: HB-TRACE V1 API
+  version: 1.0.0
+  description: Public projection, staff command and sync boundaries for HB-TRACE V1.
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/v1/health:
+    get:
+      operationId: getHealth
+      responses:
+        '200':
+          description: Provider-safe service readiness.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /api/v1/public/batches/{code}:
+    get:
+      operationId: getPublicBatch
+      parameters:
+        - $ref: '#/components/parameters/PublicCode'
+      responses:
+        '200':
+          description: Approved public publication projection.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicBatchResponse'
+        '404':
+          description: Neutral response for an unknown, withdrawn or unpublished code.
+        '429':
+          description: Lookup rate limit exceeded.
+  /api/v1/dashboard:
+    get:
+      operationId: getDashboard
+      security:
+        - sessionCookie: []
+      responses:
+        '200':
+          description: Role-filtered staff dashboard projection.
+        '401':
+          description: Staff session required.
+        '403':
+          description: Actor lacks an allowed application role.
+        '501':
+          description: Hosted persistence adapter is not enabled.
+  /api/v1/purchases:
+    post:
+      operationId: submitPurchase
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseInput'
+      responses:
+        '201':
+          description: Local-mode purchase/receipt command result. The local result is not a hosted commit.
+        '401':
+          description: Staff session required.
+        '422':
+          description: Validation failed.
+        '409':
+          description: Idempotency or optimistic-version conflict.
+        '501':
+          description: Hosted persistence adapter is not enabled.
+  /api/v1/sync:
+    post:
+      operationId: syncCommands
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/SyncEnvelope'
+                - type: array
+                  items:
+                    $ref: '#/components/schemas/SyncEnvelope'
+      responses:
+        '200':
+          description: Per-command acknowledgement or safe failure results.
+        '401':
+          description: Staff session required.
+        '501':
+          description: Hosted persistence adapter is not enabled.
+  /api/v1/imports/preview:
+    post:
+      operationId: previewFixedTemplateImport
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: kind
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [farmers, apiaries]
+      requestBody:
+        required: true
+        content:
+          text/csv:
+            schema:
+              type: string
+              maxLength: 2097152
+          application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+            schema:
+              type: string
+              format: binary
+              maxLength: 2097152
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary }
+      responses:
+        '200':
+          description: Dry-run normalized row preview; no records are committed.
+        '401':
+          description: Staff session required.
+        '413':
+          description: CSV/XLSX source exceeds the preview size limit.
+        '422':
+          description: Import kind or fixed header validation failed.
+        '501':
+          description: Hosted persistence adapter is not enabled.
+  /api/v1/imports/resolve:
+    post:
+      operationId: resolveImportDuplicate
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportDuplicateResolutionInput'
+      responses:
+        '200':
+          description: Explicit duplicate decision saved for a staged import row.
+        '401':
+          description: Staff session required.
+        '409':
+          description: Staged row or batch changed.
+        '422':
+          description: Duplicate decision is invalid for the row.
+        '501':
+          description: Hosted persistence adapter is not enabled.
+  /api/v1/imports/commit:
+    post:
+      operationId: commitImport
+      security:
+        - sessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportCommitInput'
+      responses:
+        '200':
+          description: Import commit summary. Reusing the operation UUID safely replays the original result.
+        '401':
+          description: Staff session required.
+        '409':
+          description: Commit operation or optimistic-version conflict.
+        '422':
+          description: Validation errors, unresolved duplicates or invalid commit state.
+        '501':
+          description: Hosted persistence adapter is not enabled.
+components:
+  parameters:
+    PublicCode:
+      name: code
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: sb-access-token
+  schemas:
+    HealthResponse:
+      type: object
+      required: [data, meta]
+      properties:
+        data:
+          type: object
+          required: [status, service, version, mode, providers]
+          properties:
+            status: { type: string, enum: [ok] }
+            service: { type: string, example: hb-trace }
+            version: { type: string, example: v1 }
+            mode: { type: string, enum: [local, hosted] }
+            providers: { type: object, additionalProperties: true }
+        meta: { type: object, additionalProperties: true }
+    PublicBatchResponse:
+      type: object
+      required: [data, meta]
+      properties:
+        data:
+          type: object
+          required: [publicCode, product, packageSummary, status, timeline, facts]
+          properties:
+            publicCode: { type: string }
+            product: { type: string }
+            packageSummary: { type: string }
+            packedOn: { type: string }
+            status: { type: string, enum: [published] }
+            timeline: { type: array, items: { type: object, additionalProperties: true } }
+            facts: { type: array, items: { type: object, additionalProperties: true } }
+        meta: { type: object, additionalProperties: true }
+    PurchaseInput:
+      type: object
+      required: [farmerName, apiaryName, collectionDate, quantityKg, grade]
+      properties:
+        farmerName: { type: string }
+        farmerReference: { type: string }
+        apiaryName: { type: string }
+        collectionDate: { type: string, format: date }
+        quantityKg: { type: string, pattern: '^[+]?\d+(\.\d+)?$' }
+        grade: { type: string }
+        agreedPrice: { type: string }
+        currency: { type: string, minLength: 3, maxLength: 3 }
+        paymentReference: { type: string }
+        operationId: { type: string, format: uuid }
+    ImportDuplicateResolutionInput:
+      type: object
+      required: [batchId, rowId, decision]
+      properties:
+        batchId: { type: string, format: uuid }
+        rowId: { type: string, format: uuid }
+        decision: { type: string, enum: [create, match, skip] }
+        matchedRecordId: { type: string, format: uuid }
+    ImportCommitInput:
+      type: object
+      required: [batchId, commitOperationId]
+      properties:
+        batchId: { type: string, format: uuid }
+        commitOperationId: { type: string, format: uuid }
+        allowPartialReject: { type: boolean, default: false }
+    SyncEnvelope:
+      type: object
+      required: [operationId, deviceId, actorId, deploymentId, commandType, commandSchemaVersion, targetAggregateId, occurredAt, capturedAt, timezone, clientVersion, dependencyOperationIds, payload, payloadHash]
+      properties:
+        operationId: { type: string, format: uuid }
+        deviceId: { type: string, format: uuid }
+        actorId: { type: string, format: uuid }
+        deploymentId: { type: string }
+        commandType: { type: string, enum: [farmer.create, apiary.create, purchase.submit, receipt.create, receipt.acknowledge, receipt.dispute, identifier.fallback.assign, attachment.queue] }
+        commandSchemaVersion: { type: integer, const: 1 }
+        targetAggregateId: { type: string, format: uuid }
+        expectedVersion: { type: integer, minimum: 0 }
+        occurredAt: { type: string, format: date-time }
+        capturedAt: { type: string, format: date-time }
+        timezone: { type: string }
+        clientVersion: { type: string }
+        dependencyOperationIds: { type: array, items: { type: string, format: uuid } }
+        payload: { type: object, additionalProperties: true }
+        payloadHash: { type: string, pattern: '^[a-fA-F0-9]{64}$' }
+        localAttachmentReferences: { type: array, items: { type: string } }

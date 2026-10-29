@@ -1,0 +1,15 @@
+{
+  "taskId": "replace-with-task-id",
+  "reviewer": "coordinator",
+  "createdAt": "ISO timestamp",
+  "baseCommit": "informational; uncommitted files are fingerprinted below",
+  "files": [],
+  "requirements": {},
+  "decisions": [],
+  "prerequisites": [],
+  "allowedFiles": [],
+  "interfaceExcerpts": [],
+  "extraContextBytes": 0,
+  "activationBlockers": [],
+  "note": "files/decisions/prerequisites entries use path and sha256; requirements maps ID to SHA-256; interfaceExcerpts entries use path and sha256 and contain only the accepted interface text"
+}

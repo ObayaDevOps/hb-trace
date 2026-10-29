@@ -1,191 +1,38 @@
-import {
-  Box,
-  Container,
-  Flex,
-  Heading,
-  SimpleGrid,
-  Text,
-  VStack,
-  HStack,
-  Icon,
-  Spacer,
-} from '@chakra-ui/react';
-import NextImage from 'next/image';
-import  { urlForImage } from '../../sanity/lib/image'; 
+const sectionHeading = { fontFamily: "Poppins, sans-serif", fontSize: "1.75rem", fontWeight: 500, letterSpacing: ".14rem", lineHeight: "normal", margin: "0 0 1.5rem" };
 
-const FeatureCard = ({ imageUrl, title, children }) => {
-  return (
-    <VStack align="start" p={{ base: 4, lg: 6 }}>
-      <HStack spacing={4}>
-        {imageUrl && (
-          <Flex align="center" flexShrink={0}>
-            <NextImage
-              src={imageUrl}
-              alt={`${title} icon`}
-              height={60}
-              width={60}
-            />
-          </Flex>
-        )}
-
-        <Box>
-          <Heading
-            fontSize="1.75rem"
-            fontFamily="Poppins"
-            fontStyle={'normal'}
-            fontWeight={500}
-            lineHeight="normal"
-            letterSpacing={'0.14rem'}
-            mb={1}
-          >
-            {title}
-          </Heading>
-          <Text
-            fontSize="1rem"
-            fontFamily="Poppins"
-            fontStyle={'normal'}
-            fontWeight={400}
-            lineHeight="1.875rem"
-          >
-            {children}
-          </Text>
-        </Box>
-      </HStack>
-    </VStack>
-  );
-};
+const FeatureCard = ({ title, children }) => (
+  <article style={{ display: "flex", gap: "1rem", padding: "1.5rem" }}>
+    <span aria-hidden="true" style={{ alignItems: "center", background: "linear-gradient(135deg, #00DEE3, #5700C4)", borderRadius: "50%", display: "flex", flex: "0 0 3.75rem", height: "3.75rem", justifyContent: "center", width: "3.75rem" }}>✦</span>
+    <div>
+      <h3 style={{ ...sectionHeading, fontSize: "1.75rem", marginBottom: ".25rem" }}>{title}</h3>
+      <p style={{ fontFamily: "Poppins, sans-serif", fontSize: "1rem", lineHeight: "1.875rem", margin: 0 }}>{children}</p>
+    </div>
+  </article>
+);
 
 const WhoWeAreSection = ({ sectionData }) => {
   const { title, ifaAccredited, features } = sectionData || {};
-
-  const bgColor = '#000819';
-  const textColor = 'white';
-
   return (
-    <Box bg={bgColor} py={{ base: 20, md: 16 }} px={2} color={textColor}>
-      <Container maxW="container.xl">
-        <Heading
-          fontSize={"1.75rem"}
-          fontFamily="Poppins"
-          fontStyle='normal'
-          fontWeight={500}
-          color="white"
-          lineHeight={'normal'}
-          letterSpacing="0.14rem"
-          textAlign={{ base: 'center', md: 'left' }}
-          pb={{ base: '2rem', md: '1.5rem' }}
-        >
-          {title || 'Who We Are'}
-        </Heading>
-
-        <Flex
-          direction={{ base: 'column', lg: 'row' }}
-          gap={{ base: 10, lg: 24 }}
-          align="stretch"
-        >
+    <section style={{ background: "#000819", color: "white", padding: "4rem .5rem" }}>
+      <div style={{ margin: "0 auto", maxWidth: "1280px", padding: "0 1.5rem" }}>
+        <h2 style={sectionHeading}>{title || "Who We Are"}</h2>
+        <div style={{ alignItems: "stretch", display: "flex", flexWrap: "wrap", gap: "3rem" }}>
           {ifaAccredited && (
-            <Box
-              flex={1}
-              borderRadius='0.75rem'
-              p={{ base: '1.5rem', md: '2rem' }}
-              boxShadow={`0px 0px 20px 3px rgba(0,4,14,1)`}
-              display="flex"
-              flexDirection="column"
-              bgGradient="to-r"
-              gradientFrom='#00DEE3'
-              gradientTo='#5700C4'
-              position="relative"
-              overflow="hidden"
-            >
-              {/* Added Second Gradient Overlay */}
-              <Box
-                position="absolute"
-                top="0"
-                left="0"
-                width="100%"
-                height="100%"
-                bgGradient="to-b"
-                gradientFrom='rgba(0, 8, 25, 0)'
-                gradientTo='rgba(0, 8, 25, 0.6717)'
-                zIndex={1} // Above image overlay, below content
-              />
-              {/* Image Overlay */}
-              <Box
-                position="absolute"
-                top="0"
-                right="0"
-                width="100%"
-                height="120%"
-                backgroundImage="url('https://res.cloudinary.com/medoptics-image-cloud/image/upload/v1745050251/Graphic-1-Transparent_1_y95aqf.svg')"
-                backgroundSize="contain"
-                backgroundPosition="right center"
-                backgroundRepeat="no-repeat"
-                opacity={0.3}
-                zIndex={0}
-              />
-              <Box position="relative" zIndex={2} display="flex" flexDirection="column" flexGrow={1}>
-                {ifaAccredited.logo && (
-                  <NextImage
-                    src={urlForImage(ifaAccredited.logo).width(218).height(132).url()}
-                    alt="IFA Logo"
-                    width={218}
-                    height={131.678}
-                    style={{ marginBottom: '20px' }}
-                  />
-                )}
-                <Heading
-                  fontSize={'1.25rem'}
-                  mb={2}
-                  fontFamily="Poppins"
-                  fontWeight={500}
-                  lineHeight={'normal'}
-                  letterSpacing={'0.025rem'}
-                >
-                  {ifaAccredited.title || 'IFA Accredited'}
-                </Heading>
-                <Text
-                  fontSize={'1rem'}
-                  fontFamily="Poppins"
-                  fontWeight={400}
-                  lineHeight={'1.875rem'}
-                  letterSpacing={'0.025rem'}
-                  mb={6}
-                >
-                  {ifaAccredited.description1}
-                </Text>
-                <Text
-                  fontSize={'1rem'}
-                  fontFamily="Poppins"
-                  fontWeight={400}
-                  lineHeight={'1.875rem'}
-                  letterSpacing={'0.025rem'}
-                >
-                  {ifaAccredited.description2}
-                </Text>
-                <Spacer />
-              </Box>
-            </Box>
+            <article style={{ background: "linear-gradient(135deg, #00DEE3, #5700C4)", borderRadius: ".75rem", boxShadow: "0 0 20px 3px rgba(0,4,14,1)", flex: "1 1 300px", overflow: "hidden", padding: "2rem", position: "relative" }}>
+              <span aria-hidden="true" style={{ background: "radial-gradient(circle, rgba(255,255,255,.3), transparent 65%)", inset: 0, position: "absolute" }} />
+              <div style={{ position: "relative" }}>
+                <div aria-label="IFA accredited" style={{ alignItems: "center", border: "1px solid rgba(255,255,255,.7)", borderRadius: "50%", display: "flex", fontFamily: "Poppins, sans-serif", fontSize: ".8rem", fontWeight: 600, height: "5rem", justifyContent: "center", marginBottom: "1.25rem", textAlign: "center", width: "5rem" }}>IFA<br />ACCREDITED</div>
+                <h3 style={{ fontFamily: "Poppins, sans-serif", fontSize: "1.25rem", fontWeight: 500, margin: "0 0 .5rem" }}>{ifaAccredited.title || "IFA Accredited"}</h3>
+                <p style={{ fontFamily: "Poppins, sans-serif", lineHeight: "1.875rem", margin: "0 0 1.5rem" }}>{ifaAccredited.description1}</p>
+                <p style={{ fontFamily: "Poppins, sans-serif", lineHeight: "1.875rem", margin: 0 }}>{ifaAccredited.description2}</p>
+              </div>
+            </article>
           )}
-
-          {features && features.length > 0 && (
-            <Box flex={2} mt={{base:'2.5rem', md: '0'}}>
-              <SimpleGrid columns={{ base: 1, md: 2 }} spacingX={20} spacingY={16}>
-                {features.map((feature, index) => (
-                  <FeatureCard
-                    key={index}
-                    imageUrl={feature.image ? urlForImage(feature.image).width(60).height(60).url() : ''}
-                    title={feature.title}
-                  >
-                    {feature.description}
-                  </FeatureCard>
-                ))}
-              </SimpleGrid>
-            </Box>
-          )}
-        </Flex>
-      </Container>
-    </Box>
+          {features?.length > 0 && <div style={{ display: "grid", flex: "2 1 500px", gap: "1rem", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}>{features.map((feature, index) => <FeatureCard key={feature._key || index} title={feature.title}>{feature.description}</FeatureCard>)}</div>}
+        </div>
+      </div>
+    </section>
   );
 };
 
-export default WhoWeAreSection; 
+export default WhoWeAreSection;

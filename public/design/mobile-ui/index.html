@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#233c32">
+  <title>Humble Beeing · Mobile UI reference</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23244b38'/%3E%3Ctext x='8' y='29' font-size='25' fill='%23e8b44d' font-family='Georgia'%3Eh%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="screens.js" defer></script>
+  <script src="workflows.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="studio-header">
+    <a class="studio-brand" href="#field-home"><span class="brand-symbol">h<span>b</span></span><span>Humble Beeing<small>MOBILE PRODUCT REFERENCE · 01</small></span></a>
+    <div class="studio-tools"><span class="demo-tag">Design example · fictional data</span><button id="view-toggle" class="studio-button">All screens</button><button id="print" class="studio-button">Print / PDF</button></div>
+  </header>
+  <div class="studio-layout">
+    <aside class="directory" aria-label="Screen directory">
+      <div class="directory-heading"><span class="eyebrow">FROM APIARY TO JAR</span><h1>Every step,<br>made simple.</h1><p>A working visual guide for the people who make honey happen.</p></div>
+      <label class="search-label" for="screen-search">Find a screen</label><input id="screen-search" type="search" placeholder="Try “receipt” or “offline”" autocomplete="off">
+      <nav id="screen-directory" aria-label="All mobile screens"></nav>
+      <p class="directory-footer">Prototype only. No accounts, payments or stock records are created. Changes reset when this page reloads.</p>
+    </aside>
+    <main id="studio-main">
+      <div class="preview-heading"><div><span id="section-label" class="eyebrow"></span><h2 id="screen-title"></h2></div><div class="pager"><button id="previous-screen" aria-label="Previous example">←</button><span id="screen-count"></span><button id="next-screen" aria-label="Next example">→</button></div></div>
+      <div id="single-view" class="single-view">
+        <div class="phone-stage"><div id="phone" class="phone" aria-label="Interactive mobile example"></div><p class="preview-caption">390 px reference · tap through the journey</p></div>
+        <aside class="design-notes" aria-label="Implementation reference"><div id="screen-notes"></div><div class="journey-links"><span class="eyebrow">TRY A JOURNEY</span><a href="#field-home">Meet a farmer <span>↗</span></a><a href="#hq-home">Receive honey <span>↗</span></a><a href="#production-home">Process & bottle <span>↗</span></a><a href="#quality-home">Review a problem <span>↗</span></a><a href="#my-work">Work without internet <span>↗</span></a><a href="#public-lookup">Look up a jar <span>↗</span></a></div><div class="design-principle"><span>THE DESIGN RULE</span><p>One question.<br>One clear next step.</p><small>Large controls, everyday words, and reassurance when work needs to wait.</small></div></aside>
+      </div>
+      <div id="board" class="board" hidden></div>
+    </main>
+  </div>
+  <div id="announcement" class="announcement" role="status" aria-live="polite"></div>
+  <noscript>This interactive reference needs JavaScript. The screen inventory and build notes are also available in docs/mobile-ui-reference.md.</noscript>
+</body>
+</html>
